@@ -1,0 +1,27 @@
+# 数据源配置
+sources:
+  rss:
+    - name: 新浪科技
+      url: https://rss.sina.com.cn/tech/rollnews.xml
+      category: 科技
+    - name: 新浪财经
+      url: https://rss.sina.com.cn/finance/stock.xml
+      category: 财经
+    - name: 新浪体育
+      url: https://rss.sina.com.cn/sports/sportsroll.xml
+      category: 体育
+    - name: 新浪娱乐
+      url: https://rss.sina.com.cn/ent/entroll.xml
+      category: 娱乐
+
+  local:
+    - name: 评论样本
+      path: data/samples/comments.csv
+      type: comment
+    - name: 新闻样本
+      path: data/samples/news_samples.csv
+      type: news
+
+output:
+  dir: data/raw
+  format: json

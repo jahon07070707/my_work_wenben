@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+node_modules/
+dist/
+target/
+.idea/
+.vscode/
+python/ml/saved_models/*.pt
+python/ml/saved_models/*.pkl
+python/data/raw/*.json
+python/.venv/

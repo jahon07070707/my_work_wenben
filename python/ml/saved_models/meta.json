@@ -1,0 +1,20 @@
+{
+  "categories": [
+    "科技",
+    "财经",
+    "体育",
+    "娱乐",
+    "教育",
+    "健康",
+    "社会"
+  ],
+  "sentiments": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "input_dim": 826,
+  "sample_count": 112,
+  "classification_accuracy": 0.913,
+  "sentiment_accuracy": 0.913
+}

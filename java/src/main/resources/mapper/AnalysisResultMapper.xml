@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.textanalysis.mapper.AnalysisResultMapper">
+
+    <select id="findWithText" resultType="com.textanalysis.entity.AnalysisResult">
+        SELECT ar.*, rt.title, rt.content
+        FROM analysis_result ar
+        JOIN raw_text rt ON ar.text_id = rt.id
+        <where>
+            <if test="category != null and category != ''">
+                AND ar.category = #{category}
+            </if>
+            <if test="sentiment != null and sentiment != ''">
+                AND ar.sentiment = #{sentiment}
+            </if>
+        </where>
+        ORDER BY ar.analyzed_at DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countWithFilter" resultType="int">
+        SELECT COUNT(*) FROM analysis_result ar
+        <where>
+            <if test="category != null and category != ''">
+                AND ar.category = #{category}
+            </if>
+            <if test="sentiment != null and sentiment != ''">
+                AND ar.sentiment = #{sentiment}
+            </if>
+        </where>
+    </select>
+
+    <select id="countByCategory" resultType="map">
+        SELECT category as name, COUNT(*) as value FROM analysis_result GROUP BY category
+    </select>
+
+    <select id="countBySentiment" resultType="map">
+        SELECT sentiment as name, COUNT(*) as value FROM analysis_result GROUP BY sentiment
+    </select>
+
+    <select id="countByDate" resultType="map">
+        SELECT DATE(analyzed_at) as date, COUNT(*) as count
+        FROM analysis_result
+        WHERE analyzed_at >= DATE_SUB(CURDATE(), INTERVAL #{days} DAY)
+        GROUP BY DATE(analyzed_at)
+        ORDER BY date
+    </select>
+
+    <select id="countByHour" resultType="map">
+        SELECT CONCAT(LPAD(HOUR(analyzed_at), 2, '0'), ':00') as date, COUNT(*) as count
+        FROM analysis_result
+        WHERE DATE(analyzed_at) = CURDATE()
+        GROUP BY HOUR(analyzed_at)
+        ORDER BY HOUR(analyzed_at)
+    </select>
+
+    <select id="findAllForExport" resultType="com.textanalysis.entity.AnalysisResult">
+        SELECT ar.*, rt.title, rt.content
+        FROM analysis_result ar
+        JOIN raw_text rt ON ar.text_id = rt.id
+        <where>
+            <if test="category != null and category != ''">
+                AND ar.category = #{category}
+            </if>
+            <if test="sentiment != null and sentiment != ''">
+                AND ar.sentiment = #{sentiment}
+            </if>
+        </where>
+        ORDER BY ar.analyzed_at DESC
+        LIMIT 5000
+    </select>
+
+    <select id="getWordCloudData" resultType="map">
+        SELECT keyword as name, SUM(count) as value
+        FROM hot_topic
+        WHERE stat_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+        GROUP BY keyword
+        ORDER BY value DESC
+        LIMIT #{limit}
+    </select>
+</mapper>

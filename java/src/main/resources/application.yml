@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/text_analysis?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=30m
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+ml:
+  service:
+    url: http://localhost:8000
+  python-home: ../python
+  python-path: python
+  venv-python: ../python/.venv/Scripts/python.exe
+
+auth:
+  jwt-secret: text-analysis-jwt-secret-key-for-university-project-2025
+  jwt-expire-hours: 24
+
+# LLM config (OpenAI-compatible: DeepSeek / Qwen / OpenAI)
+llm:
+  enabled: true
+  api-url: https://api.deepseek.com/v1/chat/completions
+  api-key: sk-651c4a5ee3714c9dbfc334384a999076
+  model: deepseek-chat
+
+alert:
+  negative-ratio-threshold: 0.4
+  negative-count-threshold: 5
+
+crawler:
+  python-home: ../python
+  script-path: ../python/crawler/main.py
+  python-path: ../python/.venv/Scripts/python.exe
